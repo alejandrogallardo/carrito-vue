@@ -1,26 +1,41 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container">
+    <h1>Carrito Vue</h1>
+    <hr>
+    <div class="row">
+      <Card
+        v-for="producto of productos" :key="producto.id"
+        :producto="producto"
+      />
+    </div>
+    
+      <CarritoV />
+    
+  </div>
+
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import { computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import Card from './components/Card'
+import CarritoV from './components/CarritoV'
 export default {
   name: 'App',
   components: {
-    HelloWorld
+   Card,
+   CarritoV
+  },
+  setup(){ // composition API
+    const store = useStore();
+    onMounted(() => {
+      store.dispatch('fetchData');
+    });
+    // los state se mapean en las propiedades computadas
+    const productos = computed(() => store.state.productos);
+    // const carrito = computed(() => store.state.carrito)
+    return {productos}
   }
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
